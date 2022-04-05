@@ -6,4 +6,5 @@
 tests/docker-compose.*.yml
 terraform-provider-postgresql
 
+vendor
 .idea
