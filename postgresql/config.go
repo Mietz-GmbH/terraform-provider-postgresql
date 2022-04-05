@@ -312,7 +312,12 @@ func (c *Client) ConnectTunnel() (*tunnel.Tunnel, error) {
 	}
 	t.KeepAliveInterval = 10 * time.Second
 	// Start the tunnel
-	go t.Start()
+	go func() {
+		err := t.Start()
+		if err != nil {
+			log.Fatalf("error starting tunnel: #{err}\n")
+		}
+	}()
 	// Wait until ready
 	<-t.Ready
 	return t, err
