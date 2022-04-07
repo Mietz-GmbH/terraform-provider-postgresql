@@ -1,5 +1,10 @@
 ## Unreleased
 
+## 1.15.0-jumphost-1 (April 6, 2022)
+
+FEATURES:
+* `Add ssh jumphost support`: Add SSH jumphost support - @marvin-kolja [#1](https://github.com/Mietz-GmbH/terraform-provider-postgresql/pull/1)
+
 ## 1.15.0 (February 4,  2022)
 
 FEATURES:
