@@ -286,7 +286,7 @@ func (c *Client) ConnectTunnel() (*tunnel.Tunnel, error) {
 	server, err := tunnel.NewServer(
 		c.config.JumpHost.User,
 		fmt.Sprintf("%s:%d", c.config.JumpHost.Host, c.config.JumpHost.Port),
-		"",
+		c.config.JumpHost.PrivateKey,
 		getEnv("SSH_AUTH_SOCK", ""),
 		"",
 	)
@@ -295,10 +295,6 @@ func (c *Client) ConnectTunnel() (*tunnel.Tunnel, error) {
 	}
 
 	server.Insecure = true
-
-	if c.config.JumpHost.PrivateKey != "" {
-		server.Key = &tunnel.PemKey{Data: []byte(c.config.JumpHost.PrivateKey)}
-	}
 
 	t, err = tunnel.New(
 		"local",
