@@ -311,7 +311,7 @@ func (c *Client) ConnectTunnel() (*tunnel.Tunnel, error) {
 	go func() {
 		err := t.Start()
 		if err != nil {
-			log.Fatalf("error starting tunnel: #{err}\n")
+			log.Fatalf("error starting tunnel: %v\n", err)
 		}
 	}()
 	// Wait until ready
