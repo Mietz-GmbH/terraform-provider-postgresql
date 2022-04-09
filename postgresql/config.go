@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/url"
 	"os"
@@ -282,16 +283,39 @@ func (c *Config) getDatabaseUsername() string {
 func (c *Client) ConnectTunnel() (*tunnel.Tunnel, error) {
 	var err error
 	var t *tunnel.Tunnel
+	var tempKeyFile *os.File
+	var tempKeyFilePath = ""
+
+	if c.config.JumpHost.PrivateKey != "" {
+		tempKeyFile, err = ioutil.TempFile("", "id_rsa")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		_, err = tempKeyFile.Write([]byte(c.config.JumpHost.PrivateKey))
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		tempKeyFilePath = tempKeyFile.Name()
+	}
 
 	server, err := tunnel.NewServer(
 		c.config.JumpHost.User,
 		fmt.Sprintf("%s:%d", c.config.JumpHost.Host, c.config.JumpHost.Port),
-		c.config.JumpHost.PrivateKey,
+		tempKeyFilePath,
 		getEnv("SSH_AUTH_SOCK", ""),
 		"",
 	)
 	if err != nil {
 		log.Fatalf("error processing server options: %v\n", err)
+	}
+
+	if tempKeyFilePath != "" {
+		err = os.Remove(tempKeyFilePath)
+		if err != nil {
+			log.Fatalf("Unable to remove temproary rsa key file: %v\n", err)
+		}
 	}
 
 	server.Insecure = true
