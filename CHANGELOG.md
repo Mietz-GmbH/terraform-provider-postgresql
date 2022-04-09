@@ -1,5 +1,10 @@
 ## Unreleased
 
+## 1.15.0-jumphost-2 (April 9, 2022)
+
+FIXES:
+* `Fix ssh key resolution`: Fix private key ssh jumphost support - @marvin-kolja [#2](https://github.com/Mietz-GmbH/terraform-provider-postgresql/pull/2)
+
 ## 1.15.0-jumphost-1 (April 6, 2022)
 
 FEATURES:
