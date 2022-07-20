@@ -39,6 +39,11 @@ const (
 	featurePrivilegesOnSchemas
 	featureForceDropDatabase
 	featurePid
+	featurePublishViaRoot
+	featurePubTruncate
+	featurePublication
+	featurePubWithoutTruncate
+	featureFunction
 )
 
 var sshTunnel *tunnel.Tunnel
@@ -93,6 +98,20 @@ var (
 		// Column procpid was replaced by pid in pg_stat_activity
 		// for Postgresql >= 9.2 and above
 		featurePid: semver.MustParseRange(">=9.2.0"),
+
+		// attribute publish_via_partition_root for partition is supported
+		featurePublishViaRoot: semver.MustParseRange(">=13.0.0"),
+
+		// attribute pubtruncate for publications is supported
+		featurePubTruncate: semver.MustParseRange(">=11.0.0"),
+
+		// attribute pubtruncate for publications is supported
+		featurePubWithoutTruncate: semver.MustParseRange("<11.0.0"),
+
+		// publication is Supported
+		featurePublication: semver.MustParseRange(">=10.0.0"),
+		// We do not support CREATE FUNCTION for Postgresql < 8.4
+		featureFunction: semver.MustParseRange(">=8.4.0"),
 	}
 )
 
@@ -362,7 +381,7 @@ func (c *Client) Connect() (*DBConnection, error) {
 		}
 
 		if c.config.Scheme == "postgres" {
-			db, err = sql.Open("postgres", dsn)
+			db, err = sql.Open(proxyDriverName, dsn)
 		} else {
 			db, err = postgres.Open(context.Background(), dsn)
 		}
