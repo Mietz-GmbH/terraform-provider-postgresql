@@ -1,5 +1,12 @@
 ## Unreleased
 
+## 1.16.1-jumphost-2 (June 20, 2022)
+
+FEATURES / FIXES:
+
+* Add Function overloading support - @marvin-kolja
+  [#5](https://github.com/Mietz-GmbH/terraform-provider-postgresql/pull/5)
+
 ## 1.16.0-jumphost-2 (June 20, 2022)
 
 ### Merges new changes from parent repo
